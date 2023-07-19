@@ -19,8 +19,6 @@
 
 ## <img width=600px src="https://github.com/notenoughnowjy/Dart/blob/main/Dart_Certificate_of_Completion.jpeg?raw=true"> </img>
 
-# Dart
-
 ## [2023.07.18]
 
 ### Dart - input(Scanner)
@@ -79,3 +77,215 @@ void main() {
 ```
 
 위의 코드는 전체 코드이다.
+
+---
+
+### Null Safety
+
+null safety는 개발자가 null 값을 참조할 수 없게 하는 것이다.
+
+```dart
+bool isEmpty(String string) => string.length == 0;
+main(){
+isEmpty(null);
+}
+```
+
+NoSuchMethodError를 실행한다. String을 보내야 할 곳에 null을 보냈기 때문이다. null에는 length라는 속성이 없기 때문이기도 하다. 이와 같은 에러는 컴파일러에서 잡을 수 있는 에러가 아니다. 이런 상황이 발생하지 않도록 null를 삭제하기에는 null 값은 유용하다. 그럼 어떻게 null 값을 참조하는 것을 dart는 어떻게 보호할까? dart에서는 변수가 null이 될 수 있음을 명확히 표시해야한다.
+
+```dart
+void main(){
+	String name = "jisoung";
+	name = null;
+}
+```
+
+이 코드는 에러가 난다. name이 null 값을 참조할 수 있다고 알려주지 않고 null 값을 참조하기 때문이다.
+
+```dart
+void main(){
+	String? name = "jisoung";
+	name = null;
+}
+```
+
+이 코드는 에러가 나지 않는다. 차이점이 보이는가? 바로 `?`를 사용해 이 변수에는 null이 참조될 수 있음을 알려주는 것이다. 만약 `?`를 붙인 변수는 이 변수가 null인지 아닌지 확인해야 한다.
+
+```dart
+void main(){
+	String? name = "jisoung";
+	name = null;
+	if(nico != null){
+		nico.isNotEmpty;
+	
+	}
+}
+```
+
+```dart
+// null safety는 null값을 참조할 수 없게 했다.
+// ?는 Null Safety를 의미한다.
+void main() {
+  String? name = 'JunYeong';
+  name = null;
+  name?.isNotEmpty;
+
+  if (name != null) {
+    name.isNotEmpty;
+  }
+
+  print(name);
+  print(name.runtimeType);
+}
+```
+
+---
+
+## [2023.07.19]
+
+### Dart - Practice
+
+dart에서 const는 compile-time constant를 만들어준다. `compile-time constant` : 프로그램이 컴파일되는 동안 값을 미리 알 수 있는 상수 final이랑 동일하게 작동, 값을 수정할 수 없다. 앱 스토어에 올리기 전에 값을 알고 있는 값으로 알면 편하다.
+
+```dart
+void main() {
+  const API = 1234;
+  const api = 'hello';
+  const AP = 1.2;
+}
+```
+
+- List
+
+```dart
+void main() {
+  var numbers = [1, 2, 3, 4];
+  var givemefive = true;
+  List<int> numbers2 = [
+    1,
+    2,
+    3,
+    4,
+    if (givemefive) 5, // == if(givemefive){numbers2.add(5);} => collections
+  ];
+  numbers2.add(14);
+  print(numbers.last);
+  print(numbers2);
+}
+```
+
+Dart에서는 이런 식으로 List를 선언한다. 다른 언어와의 다른 점은 list안에서 if문을 사용하여 조건적으로 값을 넣을 수 있다는 것이다.
+
+- String Interpolation
+
+```dart
+void main() {
+  String name = 'JunYeong';
+  int age = 23;
+  String greeting = "안녕 나는 $name 그리고 나는 $age살이야.";
+  print(greeting);
+}
+```
+
+Dart에서는 $를 사용해 문장에 변수를 삽입해서 값을 출력한다.
+
+- Collection for
+
+```dart
+void main() {
+  List<String> oldFriends = [
+    'JunYeong',
+    'baby',
+  ];
+  var newFriends = [
+    'lewis',
+    'ralph',
+    for (var friends in oldFriends)
+      {
+        "❤️ $friends",
+      }
+  ];
+  print(newFriends);
+}
+```
+
+Dart에서는 따로 선언 없이 Collection For을 통해서 리스트 안에 다른 리스트의 값을 넣어줄 수 있다.
+
+- Maps
+
+나는 이 부분이 가장 중요하다고 생각했다. 애플리케이션 또는 웹에서 데이터를 처리할 때 많이 사용되는 부분이기도 하기 때문이다.
+
+```dart
+void main() {
+  Map<int, bool> test = {
+    1: true,
+    2: false,
+    3: true,
+  };
+  print(test);
+
+  var player = {
+    // (key, value)로 이루어진 Map을 생성했다. any => 어느 것이든 올 수 있다.
+    'name': 'JunYeong',
+    'xp': 100.12,
+    'superpower': true,
+  };
+
+  print(player);
+  // 컴파일러가 key와 value의 자료형을 유추해준다.
+
+  Map<List<int>, bool> maptest = {
+    [1, 2, 3, 4]: true,
+    [5, 6, 7, 8]: false,
+  };
+  print(maptest);
+
+  List<Map<int, Object>> GamePlayer = [
+    {1: 'ID', 2: 'XP', 3: 'TEST'}
+  ];
+  print(GamePlayer);
+}
+```
+
+{key, value}로 이루어져 있으며, 타 언어의 any와 비슷하다. 즉 어느 것이든 올 수 있다는 것이다. 또한 List<Map< 으로도 가능하고, Map<List<로도 가능하다. 다만 두개의 문법에서는 약간의 차이가 존재한다.
+
+- Sets
+
+```dart
+void main() {
+  Set<int> numbers = {1, 2, 3, 4};
+  numbers.add(1);
+  numbers.add(1);
+  numbers.add(1);
+  numbers.add(1);
+  numbers.add(1);
+  print(numbers);
+}
+```
+
+Set에 속한 모든 아이템들은 유니크하다.또한 안에 속한 값들은 변경될 수 없며, List안의 값들은 변경 및 추가가 가능하다.
+
+- Defining a function
+
+```dart
+void sayHello(String name) {
+  print("Hello $name nice to meet you");
+}
+
+String sayGoodBye(String potato) {
+  return "Hello $potato nice to meet you!";
+}
+
+String Goodmorning(String potato) => "Hello $potato nice to meet you!";
+
+num plus(num a, num b) => a + b;
+
+void main() {
+  String name = 'JunYeong';
+  sayHello(name);
+  print(sayGoodBye('JunYeong'));
+  print(Goodmorning('Goodmorning'));
+}
+```
+
+일반 함수의 선언과 문법만 다를 뿐 별 다른 것은 없다. 추가적인 메모로는 => 과 void function(){}의 의미는 똑같은 것이다.
