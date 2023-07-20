@@ -117,7 +117,7 @@ void main(){
 	name = null;
 	if(nico != null){
 		nico.isNotEmpty;
-	
+
 	}
 }
 ```
@@ -289,3 +289,80 @@ void main() {
 ```
 
 일반 함수의 선언과 문법만 다를 뿐 별 다른 것은 없다. 추가적인 메모로는 => 과 void function(){}의 의미는 똑같은 것이다.
+
+### #3.1 Named Parameters
+
+파라미터는 크게 positional parameter와 named parameter가 존재하게 된다. positional는 당연하게도 순서에 따라 파라미터값들을 넣어주는 것을 이야기한다. named는 이 파라미터가 어떤 피라미터 입니다. 라고 명시해주면서 코드를 작성하는 것을 의미한다.
+
+큰 프로그래밍을 작성할 때는 네이밍으로 작성하는 것이 좋기 때문에 평소에 name parameter를 사용하는 것에 길들여지는 것이 좋다.
+
+```dart
+// named parameter는 기본 함수 선언 부분에서 {}를 추가해서 사용하면 된다.
+// dart에서 null이 될 것 같을때 required를 사용해서 sayHello()가 호출될 때 name, age, country를 가져와야 한다는 것을 알 게 된다. => 필수값
+void main() {
+  // print(sayHello('JunYeong', 23, 'Republic of Korea'));
+  print(sayHello(
+    name: 'JunYeong',
+    age: 23,
+    country: 'Republic of Korea',
+  ));
+}
+
+String sayHello({
+  // Default Value를 Named Parameter를 통해 설정이 가능하다.
+  String name = 'Consider',
+  int age = 25,
+  String country = 'Korea',
+}) {
+  return "Hello my name is $name, I'm $age old and I'm from $country";
+}
+
+String sayHollo({
+  // 아래 처럼 Required를 사용하게 된다면 default 값을 사용할 수 없다. 하지만 required 덕분에 함수에 필요한 값이 설정되지 않는다면 함수 또한 실행되지 않는다.
+  required name = 'Consider',
+  required age = 25,
+  required country = 'Korea',
+}) {
+  return "Hello my name is $name, I'm $age old and I'm from $country";
+}
+```
+
+### #3.2 Recap
+
+named parameter를 할 때에는 첫번째 방법으로는 default value를 설정하는 것이 있고 두번째 방법으로는 required를 사용하는 것이 있다. 둘 중 편한 것을 사용하면 편하다.
+
+```dart
+void main() {
+  print(SayHello(
+    name: "JunYeong",
+    age: 15,
+    country: "korea",
+  ));
+}
+
+String SayHello({
+  required String name,
+  required int age,
+  required String country,
+}) {
+  return "$name $age $country";
+}
+```
+
+---
+
+### #3.3 Optional Positional Parameter
+
+Optional Positional Parameter는 함수의 선언 부분에서 `[]`를 치고, 자료형 타입 뒤에 ?를 붙임으로써 null값을 반환할 수 있고, Default Value를 설정해서 기본 값을 출력할 수 있다.
+
+```dart
+String sayHello(String name, int age, [String? country]) =>
+    "안녕하세요. $name, $age살 이시고, $country에서 오셨네요!";
+void main() {
+  sayHello(
+    "JunYeong",
+    23,
+  );
+  print(sayHello('Consider', 23));
+}
+```
