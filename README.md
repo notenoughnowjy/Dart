@@ -366,3 +366,54 @@ void main() {
   print(sayHello('Consider', 23));
 }
 ```
+
+### #3.4 QQ Operator
+
+먼저 boolean에는 `Condition ? value : value` 조건이 있다. null에도 이와 같은 조건이 존재한다. 바로 QQ Operator이다. QQ Operator는 ??과 ??=이 존재한다.
+
+??는 `name?.toUpperCase() ?? 'ANON';` 와 같이 사용되어 진다. 코드를 해석해보면 null이 아니면 null일지 아닐지도 모르는(?) name의 값을 모두 대문자로 출력한다. 하지만 그렇지 않고 null이면 ‘ANON’을 출력한다는 의미이다. 즉, QQ Operator를 이용해서 가독성을 높일 수 있고, 코드의 길이를 줄일 수 있다.
+
+??=는 QQ Equals 혹은 QQ assignment operator라고 불린다. 이것은 `name ??= 'junyoung';` 이런 식으로 사용되어진다. 코드를 해석해보자면 `String? name;`으로 선언 되어 있으므로 `name`은 `null`값으로 시작한다. 그 다음 `name ??= 'junyoung';`은 `name`의 값이 null이면 `junyoung`을 출력하라는 의미이다. 그래서 출력 결과를 보면 약간의 오류와 함께 `junyoung`이 출력된 것을 볼 수 있다. 이것은 아래의 QQ Equals를 보면 `junyoung`을 출력 후 name의 값이 `null`이 아닌 상태에서 `'another'`값을 받게 되어서 오류가 발생하는 것이다.
+
+이것을 올바르게 출력하려면 No Error QQ Equals처럼 출력하면 된다. 즉 중간값에 null을 선언해줘서 name을 null로 바꾸어 주는 것이다.
+
+![스크린샷 2023-07-20 오후 5.30.45.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0be2be8d-19a3-442d-a099-b3075d981849/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2023-07-20_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_5.30.45.png)
+
+- QQ Operator
+
+```dart
+// ?? => QQ Operator
+// ??= => QQ equals 혹은 QQ asignment operator라고 불린다.
+
+String capitalizename(String? name) =>
+    // name != null ? name.toUpperCase() : 'ANON';
+    name?.toUpperCase() ?? 'ANON';
+
+void main() {
+  print(capitalizename(null));
+  print(capitalizename("junyoung"));
+}
+```
+
+- QQ Equals, QQ assignment operator
+
+```dart
+void main() {
+  String? name;
+  name ??= 'junyoung';
+  name ??= 'another';
+  print(name);
+}
+```
+
+- No Error QQ Equals
+
+```dart
+void main() {
+  String? name;
+  name ??= 'junyoung';
+  name = null;
+  name ??= 'another';
+  print(name);
+}
+```
