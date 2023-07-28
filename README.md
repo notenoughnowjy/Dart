@@ -417,3 +417,166 @@ void main() {
   print(name);
 }
 ```
+
+## [2023.07.28]
+
+## Dart
+
+### #3.5_Typedef
+
+typedef를 사용하기 위해서는 다음과 같은 구문을 사용합니다.
+
+`typedef 유형 이름 = 함수 타입;`
+
+위의 List<String>을 함수의 타입으로 정의하고 싶다면 다음과 같이 정의할 수 있습니다.
+
+`typedef ListOfString = List<String>;`
+
+이제 ListOfString 타입의 함수를 정의하고 사용할 수 있습니다.
+
+```dart
+typedef ListOfString = List<String>;
+
+ListOfString reverseListOfName(ListOfString list) {
+  var reversed = list.reversed;
+  return reversed.toList();
+}
+
+void main() {
+  var data = ['john','mike','tom'];
+  print(reverseListOfName(data));
+}
+```
+
+### typedef의 장단점
+
+typedef를 사용하면 함수의 타입을 명확하게 표현할 수 있어 가독성이 높아집니다. 또한, 특정 타입을 가진 함수를 많이 사용하는 경우 간결한 코드를 작성할 수 있습니다. 하지만, typedef를 사용할 때 명시적으로 타입을 정해야 하므로 개발자가 추가적인 코드를 작성해야 할 수도 있습니다.
+
+그러나, Dart의 경우 강력한 제네릭 기능을 갖추고 있어 타입을 명시적으로 정의하지 않아도 되는 경우도 많습니다. 따라서, typedef를 사용하는 것이 필요한 경우에만 사용하면 됩니다.
+
+```dart
+typedef ListOfInts = List<int>;
+
+List<int> reversedOfNumbers(ListOfInts list) {
+  var reversed = list.reversed;
+  return reversed.toList();
+}
+
+void main() {
+  print(reversedOfNumbers([1, 2, 3]));
+}
+```
+
+```dart
+typedef UserInfo = Map<String, String>;
+
+String sayHi(UserInfo userInfo) {
+  return "Hi ${userInfo['name']}";
+}
+
+void main() {
+  print(sayHi({"name": 'asdqwd'}));
+}
+```
+
+---
+
+### #4.0 Your First Dart Class(04:42)
+
+Dart Class
+
+```dart
+class Person {
+  String name = "JunYeong";
+  int score = 2000;
+
+  void SayHello() {
+    print("Hello!! My name is $name");
+  }
+}
+
+void main() {
+  Person().SayHello();
+}
+```
+
+---
+
+### #4.1 Construction (03:58)
+
+Constructions
+
+첫번째의 Construction은 Java와 유사하듯이 class의 name과 xp의 값을 받고 this.name으로 선언 후 sayHello 함수를 호출해서 main에서 값을 정하고 출력한다.
+
+```dart
+class Player2 {
+  late final String name;
+  late int xp;
+
+  Player2(String name, int xp) {
+    this.name = name;
+    this.xp = xp;
+  }
+  void SayHello() {
+    print("Hello My name is $name and My xp is $xp");
+  }
+}
+
+void main() {
+  Player2("JunYeong", 1500).SayHello();
+}
+```
+
+하지만 아래의 코드는 여러 상황들을 줄여버리고, 한 줄의 코드로 선언해서 출력는 모습을 볼 수 있다. 즉 훨씬 더 간결해졌다.
+
+```dart
+class Player2 {
+  late final String name;
+  late int xp;
+
+  Player2(this.name, this.xp);
+
+  void SayHello() {
+    print("Hello My name is $name and My xp is $xp");
+  }
+}
+
+void main() {
+  Player2("JunYeong", 1500).SayHello();
+}
+```
+
+---
+
+### #4.3 Named Constructor Parameters (04:12)
+
+Construcor을 통해서 값을 배정하게 된다면, 가독성에서 순서를 기억하고, 어떤 것이 어떤것인지에 대해서 잘 모를 수 있다. 이것을 방직하기 위해서 Named Constructor을 통해서 가독성을 높일 수 있다.
+
+```dart
+class Player2 {
+  late final String name;
+  late int xp;
+  String team;
+  int age;
+
+  Player2({
+    required this.name,
+    required this.xp,
+    required this.team,
+    required this.age,
+  });
+
+  void SayHello() {
+    print("Hello My name is $name and My xp is $xp");
+  }
+}
+
+void main() {
+  Player2(
+    name: "JunYeong",
+    team: "Red",
+    xp: 1500,
+    age: 23,
+  ).SayHello();
+}
+```
