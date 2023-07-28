@@ -1,4 +1,6 @@
-String sayHi(Map<String, String> userInfo) {
+typedef UserInfo = Map<String, String>;
+
+String sayHi(UserInfo userInfo) {
   return "Hi ${userInfo['name']}";
 }
 
