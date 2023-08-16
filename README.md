@@ -580,3 +580,177 @@ void main() {
   ).SayHello();
 }
 ```
+
+## Dart
+
+### #4.6 Enums(03:12)
+
+```dart
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
+enum Team { red, blue }
+
+class Player {
+  String name;
+  int xp;
+  Team team;
+
+  Player({
+    required this.name,
+    required this.xp,
+    required this.team,
+  });
+
+  void sayHello() {
+    print("Hello $name, $team");
+  }
+}
+
+void main() {
+  Player(name: "name", xp: 123, team: Team.blue).sayHello();
+}
+```
+
+### enum의 기본 사용법
+
+예를 들어 공지사항, 게시판, 미정의로 게시판의 타입이 구분된다고 생각하면, enum을 사용하면 아래와 같이 선언해서 사용할 것이다.
+
+```dart
+enum BoardType{notice, free, undefined}
+```
+
+일반 String 타입과 enum 타입의 차이점은 아래의 코드와 같다
+
+```dart
+// BAD
+// board 모델에서 string타입의 type 변수를 사용할경우
+
+if (board.type == "notice") {
+   ...
+} else if (board.Type == "free") {
+  .....
+} else {
+....
+}
+
+// GOOD
+// enum 형식으로 type 변수를 사용할경우
+if (board.type == BoardType.notice) {
+...
+} else  if (board.type == BoardType.free) {
+...
+} else {
+...
+}
+```
+
+---
+
+### Dart에서 String을 enum으로 바로 변환할 수 없다.
+
+enum을 사용하는 것이 String을 사용하는 것보다 훨씬 더 좋은 방법임은 틀림없다. 하지만 Dart에서는 서버 API 등에서 받은 String 형식의 값을 enum으로 변환하는 별도의 기능을 제공하지 않아 String 값을 enumdㅡ로 변환하는데 불편함이 있다.
+
+서버로부터 게시판 목록을 가져오는 API에서 아래와 같은 결과를 받았다고 가정해보자. 이 응답 값을 앱에서 사용하기 위해서는 적당한 모델 클래스로 변환해야 할 것 이다.
+
+```json
+// API response - JSON
+
+"boaders"  : [
+    {
+      "id" : "notice01",
+      "title" : "공지사항",
+       "type" : "notice",
+       .....
+    },
+    {
+      "id" : "free01",
+      "title" : "자유게시판",
+       "type" : "free",
+       .....
+    },
+]
+```
+
+위의 JSON 코드의 결과값을 아래 Boader 클래스로 변환한다고 가정해보자.
+
+`Board 클래스`의 `type 필드`는 API에서는 문자열 `“notice”`임으로 `parseToboardType` 함수와 같이 String 형식의 값을 BoaderType함수와 같이 `String 형식의 값을 BoaderType으로 변화하는 과정이 필요`하다.
+
+```json
+// Boader Model
+class Boader {
+     final String id;
+     final String title;
+     final BoaderType type;
+}
+
+// value를 입력받아 BoarderType으로 변환함
+BoaderType parseToBoardType(String value) {
+   if (value == "notice") {
+      return BoaderType.notice;
+  } else if (value == "free") {
+      return BoaderType.free
+  }
+  return BoaderType.undefinde;
+}
+```
+
+### Extention과 EnumData 클래스를 이용한 쉬운 enum 변환 및 활용
+
+Dart에서는 Extension을 이용해서 enum을 화갖ㅇ해서 사용할 수 있다.
+
+enumData라는 클래스를 만들어 enum에 필요한 property를 정의하였고, extention의 code와 name getter을 통해 별도의 조건식 없이 값을 가져다 사용할 수 있도록 하였다.
+
+```json
+class EnumData {
+  final String code;
+  final String displayName;
+  EnumData({required this.code, required this.displayName});
+}
+
+enum BoardType { notice, free, undefined }
+
+extension BoaderTypeExt on BoaderType {
+  static final _data = {
+    BoaderType.notice: EnumData(code: 'notice', displayName: 'Notice'),
+    BoaderType.free: EnumData(code: 'free', displayName: 'Free'),
+    BoaderType.undefined: EnumData(code: '', displayName ''),
+  };
+
+  static BoaderType.getByCode(String code) {
+    try {
+      return _data.entries.firstWhere((el) => el.value.code == code).key;
+    } catch (e) {
+      return BoaderType.undefined;
+    }
+  }
+  String get code => _data[this]!.code;
+  String get displayName => _data[this]!.displayName;
+}
+```
+
+### 최신의 Dart
+
+extention의 도움 없이 enum을 편하게 사용 가능하다!
+
+```json
+enum BoardType {
+  notice('notice', '공지사항'),
+  free('free', '자유게시판'),
+  undefined('undefined', '');
+
+  const BoardType(this.code, this.displayName);
+  final String code;
+  final String displayName;
+
+  factory BoardType.getByCode(String code){
+    return BoardType.values.firstWhere((value) => value.code == code,
+                                        orElse: () => BoardType.undefined);
+  }
+}
+```
+
+⚡로직 중간에 문자열을 직접 사용하는 코드를 만들어서는 안된다! 특히 고정값들만 있을 경우에는 꼭 enum으로 만들어서 사용하는 것이 권장!
+
+출처 :
+
+[[Flutter/Dart] dart에서 열거형(enum) 의 효율적인 변환과 활용](https://ctoahn.tistory.com/27)
