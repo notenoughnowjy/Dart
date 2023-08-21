@@ -27,8 +27,14 @@ class Person {
   }
 }
 
-class Player with Strong, QuickRunner, tall {}
+class Player with Strong, QuickRunner, tall {
+  @override
+  void runQuick() {
+    super.runQuick();
+  }
+}
 
 void main() {
   Person(team: Team.red).sayHello();
+  Player().runQuick();
 }
